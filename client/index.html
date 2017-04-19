@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Smart Home</title>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="index.js"></script>
+</head>
+<body>
+	<h1>Smart Home</h1>
+	<div id="led-state"></div>
+	<form onsubmit="return toggleLed(this);">
+		<input type="submit" value="Toggle Led">
+	</form>
+</body>
+</html>
