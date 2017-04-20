@@ -10,6 +10,7 @@ app.get('/hi', function(req, res) {
 });
 
 var board = null;
+var boardStatus = {};
 
 io.on('connection', function(socket){
 	console.log('Nuevo cliente conectado ' + socket.handshake.address);
@@ -17,9 +18,9 @@ io.on('connection', function(socket){
 	socket.on('new-board', function(data){
 		console.log("NEW BOARD!");
 		board = socket;
-	}).on('led-state', function(data){
-		console.log('Estado del led: ' + data.state);
-		io.sockets.emit('led-state', data);
+	}).on('new-board-status', function(data){
+		boardStatus = data;
+		io.sockets.emit('board-status', data);
 	}).on('toggle-led', function(data){
 		console.log('Invoke: toggle-led');
 		if (board != null) {
@@ -28,10 +29,10 @@ io.on('connection', function(socket){
 		}
 	});
 
-	socket.emit('is-board', {});
-
 	if (board != null) {
-		board.emit('get-led-state', {});
+		socket.emit('board-status', boardStatus);
+	} else {
+		socket.emit('board-status', {});
 	}
 });
 

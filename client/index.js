@@ -2,19 +2,21 @@ var host = window.location.host;
 
 var socket = io.connect(host, {'forceNew':true});
 
-socket.on('led-state', function(data){
-	console.log(data);
-	renderState(data);
+socket.on('board-status', function(board){
+	var html = board.components.map(function(component, index){
+		return (`
+			<div>
+				<h3>${component.name}</h3>
+				<div>Estado: <strong>${component.status}</strong></div>
+				<div>Acción: <form onsubmit="${component.action}">
+						<input type="submit" value="${component.actionName}">
+					</form>
+				</div>
+			</div>
+			`);
+	}).join(' ');
+
+	document.getElementById('board').innerHTML = html;
 });
-
-function renderState(data){
-	var html = (`<div>El led está: <strong>${data.state}</strong></div>`);
-	document.getElementById('led-state').innerHTML = html;
-}
-
-function toggleLed(e){
-	socket.emit('toggle-led', {});
-	return false;
-}
 
 
